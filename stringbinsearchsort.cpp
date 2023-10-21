@@ -15,6 +15,10 @@ int main (int argc, char **argv) {
     for (auto & el : A)
         cin >> el;
     
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    ios_base::sync_with_stdio(false);
+
     /* Sort process */
     for (int i = 1; i < n; ++i) {
         int l = 0, r = i - 1;
@@ -32,6 +36,14 @@ int main (int argc, char **argv) {
             swap(A[j], A[j - 1]);
     }
 
+    /* Getting the time of sorting */
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    double time_taken;
+    time_taken = (end.tv_sec - start.tv_sec) * 1e9;
+    time_taken = (time_taken + (end.tv_nsec - start.tv_nsec)) * 1e-9;
+    cout << time_taken << setprecision(9) << '\n';
+
+    /* Print sorted array */
     if (argc == 2) {
         cout << "Sorted array :\n";
         for (int i = 0; i < n; ++i)

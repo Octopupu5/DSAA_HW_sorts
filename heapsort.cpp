@@ -26,9 +26,16 @@ int main (int argc, char **argv) {
     int n;
     cin >> n;
 
+    mt19937 gen(time(nullptr));
+
     vector<int> A(n);
-    for (auto & el : A)
-        cin >> el;
+    for (auto & el : A) {
+        el = gen();
+    }
+
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    ios_base::sync_with_stdio(false);
 
     /* Sort process */
     for (int i = n / 2 - 1; i >= 0; --i)
@@ -39,6 +46,14 @@ int main (int argc, char **argv) {
         heap(A, 0, i);
     }
 
+    /* Getting the time of sorting */
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    double time_taken;
+    time_taken = (end.tv_sec - start.tv_sec) * 1e9;
+    time_taken = (time_taken + (end.tv_nsec - start.tv_nsec)) * 1e-9;
+    cout << time_taken << setprecision(9) << '\n';
+
+    /* Print sorted array */
     if (argc == 2) {
         cout << "Sorted array :\n";
         for (int i = 0; i < n; ++i)
