@@ -4,6 +4,7 @@ import copy, random
 import time
 import subprocess
 
+
 types = ["insertionsort.cpp", "mergesort.cpp",
          "qsort.cpp", "nlognqsort.cpp",
          "heapsort.cpp", "stringsort.cpp",
@@ -14,7 +15,7 @@ def logging_time(original_fn):
         start_time = time.time()
         result = original_fn(*args, **kwargs)
         elapsed_time = (time.time() - start_time) * 1e3
-        print("WorkingTime[{}]: {:.5f} ms".format(original_fn.__name__, elapsed_time))
+        print("WorkingTime[{}]: {:.5f} ms".format(original_fn.__name__, elapsed_time - 1))
         return result
     return wrapper_fn
 
@@ -22,8 +23,13 @@ def logging_time(original_fn):
 def run_sort(command, input_data):
     subprocess.run(command, input=input_data, text=True, stdout=subprocess.PIPE, shell=True)
 
+def run_sort_print(command, input_data):
+    res = subprocess.run(command, input=input_data, text=True, stdout=subprocess.PIPE, shell=True)
+    output = res.stdout
+    print(output)
+
 compile_command = f"g++ {types[0]} -o test"
 subprocess.run(compile_command, shell=True)
-exec_command  = ".\\test"
+exec_command  = "./test print"
 input_data = "3 10 9 8"
-run_sort(exec_command, input_data)
+run_sort_print(exec_command, input_data)

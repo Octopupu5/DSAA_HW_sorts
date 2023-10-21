@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <chrono>
 using namespace std;
 
 int main (int argc, char **argv) {
@@ -15,9 +14,6 @@ int main (int argc, char **argv) {
     vector<int> A(n);
     for (auto & el : A)
         cin >> el;
-    
-    auto start = chrono::high_resolution_clock::now();
-    ios_base::sync_with_stdio(false);
 
     /* Sorting process */
     for (int i = 0; i < n; ++i) {
@@ -25,14 +21,6 @@ int main (int argc, char **argv) {
         for (int j = i - 1; j >= 0 && A[j] > saved; --j)
             swap(A[j], A[j + 1]);
     }
-
-    auto end = chrono::high_resolution_clock::now();
-    double time_taken = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
- 
-    time_taken *= 1e-9;
- 
-    cout << "Time taken by program is : " << fixed << time_taken << setprecision(9);
-    cout << " sec" << endl;
 
     if (argc == 2) {
         cout << "Sorted array :\n";
