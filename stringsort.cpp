@@ -11,13 +11,13 @@ int main (int argc, char **argv) {
     int n;
     cin >> n;
 
-    vector<int> A(n);
+    vector<string> A(n);
     for (auto & el : A)
         cin >> el;
-    
-    /* Sorting process */
-    for (int i = 0; i < n; ++i) {
-        int saved = A[i];
+
+    /* Sort process */
+    for (int i = 1; i < n; ++i) {
+        string saved = A[i];
         for (int j = i - 1; j >= 0 && A[j] > saved; --j)
             swap(A[j], A[j + 1]);
     }
@@ -25,8 +25,7 @@ int main (int argc, char **argv) {
     if (argc == 2) {
         cout << "Sorted array :\n";
         for (int i = 0; i < n; ++i)
-            cout << A[i] << ' ';
-        cout << '\n';
+            cout << A[i] << '\n';
     }
 
     return 0;
