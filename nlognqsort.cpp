@@ -1,11 +1,35 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+int getMedian(vector<int> &A, int start_pos, int sz) {
 
+}
 
-void quicksort (vector<int> &A, int l, int r) {
-    if (l >= r) return;
+int median (vector<int> &A, int l, int r, int index) {
+    if (index <= 0 || index > r - l + 1) return INT_MAX;
+    int sz = r - l + 1, i;
+    vector<int> medians;
+    for (i = 0; i < sz / 5; ++i) {
+        medians.push_back(getMedian(A, i * 5, 5));
+    }
+    if (sz / 5 * 5 != sz) {
+        medians.push_back(getMedian(A, i * 5, sz % 5));
+        ++i;
+    }
 
+    int medianAlongAll;
+    if (sz <= 5) medianAlongAll = medians[0];
+    else medianAlongAll = median(medians, 0, i - 1, i / 2);
+    
+    int medAlongAllPos = divide(A, l, r, medianAlongAll);
+    if (medAlongAllPos - l == index - 1)
+        return A[medAlongAllPos];
+    if (medAlongAllPos - l > index - 1)
+        return median(A, l, medAlongAllPos - 1, index);
+    return median(A, medAlongAllPos + 1, r , index - medAlongAllPos + l - 1);
+}
+
+int divide (vector<int> &A, int l, int r, int pivot) {
     int pivot_index = find(A.begin() + l, A.begin() + r, pivot) - A.begin();
     swap(A[pivot_index], A[l]);
     
@@ -16,6 +40,15 @@ void quicksort (vector<int> &A, int l, int r) {
         if (i < pivot_index && j > pivot_index)
             swap(A[i++], A[j--]);
     }
+    return pivot_index;
+}
+
+void quicksort (vector<int> &A, int l, int r) {
+    if (l >= r) return;
+
+    int median_index = (r - l + 1) / 2;
+    int pivot = median(A, l, r, median_index);
+    int pivot_index = divide(A, l, r, pivot);
 
     quicksort(A, l, pivot_index - 1);
     quicksort(A, pivot_index + 1, r);

@@ -8,13 +8,20 @@ struct node {
     node (int xx = 0, node *nextx = nullptr, node *downx = nullptr) : x(xx), next(nextx), down(downx) {}
 };
 
-void insert (node *& skiplist, int key, int h) {
+void insert (node *& skiplist, int key, int &sl_h) {
+    int height = 1;
+    while (rand() % 2 != 0 && height < sl_h - 1) ++height;
+    // if (height == sl_h) {
+    //     sl_h = height + 1;
+    //     node *right_bound = new node(INT_MAX, nullptr, skiplist->next->down);
+    //     skiplist = new node(INT_MIN, right_bound, skiplist);
+    //     cout << sl_h << '\n';
+    // }
+    
+    int h = sl_h;
     node *l = skiplist;
     node *r = l->next;
-    int height = 1;
-    while (rand() % 2 != 0 && height < h - 1) ++height;
-    
-    node * upper = nullptr;
+    node *upper = nullptr;
     while (l->down != nullptr) {
         --h;
         l = l->down;
@@ -41,8 +48,6 @@ int main (int argc, char **argv) {
     /* Input process */
     int n;
     cin >> n;
-    int h;
-    cin >> h;
 
     mt19937 gen(time(nullptr));
 
@@ -58,7 +63,8 @@ int main (int argc, char **argv) {
     node *down_left = nullptr;
     node *down_right = nullptr;
     node *skiplist = nullptr;
-    for (int i = 0; i < 16; ++i) {
+    int h = 18;
+    for (int i = 0; i < h; ++i) {
         node *right_bound = new node(INT_MAX, nullptr, down_right);
         skiplist = new node(INT_MIN, right_bound, down_left);
         down_left = skiplist;
@@ -66,7 +72,7 @@ int main (int argc, char **argv) {
     }
 
     for (int i = 0; i < n; ++i) {
-        insert(skiplist, A[i], 16);
+        insert(skiplist, A[i], h);
     }
 
     /* Getting the time of sorting */
