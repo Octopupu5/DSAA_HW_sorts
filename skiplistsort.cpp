@@ -10,7 +10,7 @@ struct node {
 
 void insert (node *& skiplist, int key, int &sl_h) {
     int height = 1;
-    while (rand() % 2 != 0 && height < sl_h - 1) ++height;
+    while ((rand() & 1) && height < sl_h - 1) ++height;
     // if (height == sl_h) {
     //     sl_h = height + 1;
     //     node *right_bound = new node(INT_MAX, nullptr, skiplist->next->down);
@@ -63,7 +63,7 @@ int main (int argc, char **argv) {
     node *down_left = nullptr;
     node *down_right = nullptr;
     node *skiplist = nullptr;
-    int h = 16;
+    int h = log2(n) + 1;
     for (int i = 0; i < h; ++i) {
         node *right_bound = new node(INT_MAX, nullptr, down_right);
         skiplist = new node(INT_MIN, right_bound, down_left);

@@ -25,12 +25,16 @@ int getMedian(vector<int> &A, int pos, int sz) {
             return A[pos + 1];
         }
         default: {
-            if (A[pos] > A[pos + 1]) swap(A[pos], A[pos + 1]);
-            if (A[pos + 2] > A[pos + 3]) swap(A[pos + 2], A[pos + 3]);
-            if (A[pos] > A[pos + 2]) swap(A[pos], A[pos + 2]);
-            if (A[pos + 2] > A[pos + 4])
+            if (A[pos + 1] > A[pos]) swap(A[pos], A[pos + 1]);
+            if (A[pos + 3] > A[pos + 2]) swap(A[pos + 2], A[pos + 3]);
+            if (A[pos + 2] > A[pos]) {
+                swap(A[pos], A[pos + 2]);
+                swap(A[pos + 1], A[pos + 3]);
+            }
+            if (A[pos + 2] > A[pos + 4]) {
                 if (A[pos + 4] > A[pos + 3])
                     swap(A[pos + 3], A[pos + 4]);
+            }
             else {
                 if (A[pos] > A[pos + 4]) {
                     swap(A[pos + 3], A[pos + 4]);
@@ -111,8 +115,8 @@ void quicksort (vector<int> &A, int l, int r) {
     int pivot = median(A, l, r, median_index);
     int pivot_index = divide(A, l, r, pivot);
 
-    quicksort(A, l, pivot_index - 1);
-    quicksort(A, pivot_index + 1, r);
+    //quicksort(A, l, pivot_index - 1);
+    //quicksort(A, pivot_index + 1, r);
 }
 
 int main (int argc, char **argv) {
@@ -122,51 +126,37 @@ int main (int argc, char **argv) {
     }
 
     /* Input process */
-    // int n;
-    // cin >> n;
+    int n;
+    cin >> n;
 
-    // mt19937 gen(time(nullptr));
+    mt19937 gen(time(nullptr));
 
-    // vector<int> A(n);
-    // for (auto & el : A) {
-    //     el = gen();
-    // }
+    vector<int> A(n);
+    for (auto & el : A) {
+        el = gen();
+    }
 
-    // struct timespec start, end;
-    // clock_gettime(CLOCK_MONOTONIC, &start);
-    // ios_base::sync_with_stdio(false);
+    struct timespec start, end;
+    clock_gettime(CLOCK_MONOTONIC, &start);
+    ios_base::sync_with_stdio(false);
 
-    // /* Sort process */
-    // quicksort(A, 0, n - 1);
+    /* Sort process */
+    quicksort(A, 0, n - 1);
 
-    // /* Getting the time of sorting */
-    // clock_gettime(CLOCK_MONOTONIC, &end);
-    // double time_taken;
-    // time_taken = (end.tv_sec - start.tv_sec) * 1e9;
-    // time_taken = (time_taken + (end.tv_nsec - start.tv_nsec)) * 1e-9;
-    // cout << time_taken << setprecision(9) << '\n';
+    /* Getting the time of sorting */
+    clock_gettime(CLOCK_MONOTONIC, &end);
+    double time_taken;
+    time_taken = (end.tv_sec - start.tv_sec) * 1e9;
+    time_taken = (time_taken + (end.tv_nsec - start.tv_nsec)) * 1e-9;
+    cout << time_taken << setprecision(9) << '\n';
 
-    // /* Print sorted array */
-    // if (argc == 2) {
-    //     cout << "Sorted array :\n";
-    //     for (int i = 0; i < n; ++i)
-    //         cout << A[i] << ' ';
-    //     cout << '\n';
-    // }
-
-    vector<int> p({1, 2, 3, 4, 5});
-    vector<int> perm(p);
-    do {
-        vector<int> x(p);
-        getMedian(x, 0, 5);
-        for (auto & el : p)
-            cout << el << ' ';
+    /* Print sorted array */
+    if (argc == 2) {
+        cout << "Sorted array :\n";
+        for (int i = 0; i < n; ++i)
+            cout << A[i] << ' ';
         cout << '\n';
-        for (auto & el : x)
-            cout << el << ' ';
-        cout << '\n';
-        cout << '\n';
-    } while (next_permutation(p.begin(), p.end()));
+    }
 
     return 0;
 }
