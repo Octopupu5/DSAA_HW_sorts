@@ -63,7 +63,7 @@ int main (int argc, char **argv) {
     node *down_left = nullptr;
     node *down_right = nullptr;
     node *skiplist = nullptr;
-    int h = 18;
+    int h = 16;
     for (int i = 0; i < h; ++i) {
         node *right_bound = new node(INT_MAX, nullptr, down_right);
         skiplist = new node(INT_MIN, right_bound, down_left);

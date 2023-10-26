@@ -1,32 +1,72 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int getMedian(vector<int> &A, int start_pos, int sz) {
-
-}
-
-int median (vector<int> &A, int l, int r, int index) {
-    if (index <= 0 || index > r - l + 1) return INT_MAX;
-    int sz = r - l + 1, i;
-    vector<int> medians;
-    for (i = 0; i < sz / 5; ++i) {
-        medians.push_back(getMedian(A, i * 5, 5));
+int getMedian(vector<int> &A, int pos, int sz) {
+    switch (sz) {
+        case 1: {
+            return A[pos];
+        }
+        case 2: {
+            if (A[pos] > A[pos + 1]) swap(A[pos], A[pos + 1]);
+            return A[pos];
+        }
+        case 3: {
+            if (A[pos] > A[pos + 1]) swap(A[pos], A[pos + 1]);
+            if (A[pos + 1] > A[pos + 2]) swap(A[pos + 1], A[pos + 2]);
+            if (A[pos] > A[pos + 1]) swap(A[pos], A[pos + 1]);
+            return A[pos + 1];
+        }
+        case 4: {
+            if (A[pos] > A[pos + 1]) swap(A[pos], A[pos + 1]);
+            if (A[pos + 2] > A[pos + 3]) swap(A[pos + 2], A[pos + 3]);
+            if (A[pos] > A[pos + 2]) swap(A[pos], A[pos + 2]);
+            if (A[pos + 1] > A[pos + 3]) swap(A[pos + 1], A[pos + 3]);
+            if (A[pos + 1] > A[pos + 2]) swap(A[pos + 1], A[pos + 2]);
+            return A[pos + 1];
+        }
+        default: {
+            if (A[pos] > A[pos + 1]) swap(A[pos], A[pos + 1]);
+            if (A[pos + 2] > A[pos + 3]) swap(A[pos + 2], A[pos + 3]);
+            if (A[pos] > A[pos + 2]) swap(A[pos], A[pos + 2]);
+            if (A[pos + 2] > A[pos + 4])
+                if (A[pos + 4] > A[pos + 3])
+                    swap(A[pos + 3], A[pos + 4]);
+            else {
+                if (A[pos] > A[pos + 4]) {
+                    swap(A[pos + 3], A[pos + 4]);
+                    swap(A[pos + 3], A[pos + 2]);
+                }
+                else {
+                    swap(A[pos], A[pos + 4]);
+                    swap(A[pos + 4], A[pos + 3]);
+                    swap(A[pos + 3], A[pos + 2]);
+                }
+            }
+            if (A[pos + 3] > A[pos + 1]) {
+                if (A[pos + 4] > A[pos + 1]) {
+                    swap(A[pos], A[pos + 4]);
+                    swap(A[pos + 2], A[pos + 3]);
+                    swap(A[pos], A[pos + 1]);
+                }
+                else {
+                    swap(A[pos], A[pos + 4]);
+                    swap(A[pos + 2], A[pos + 3]);
+                }
+            }
+            else {
+                if (A[pos + 2] > A[pos + 1]) {
+                    swap(A[pos], A[pos + 4]);
+                    swap(A[pos + 3], A[pos + 1]);
+                    swap(A[pos + 2], A[pos + 3]);
+                }
+                else {
+                    swap(A[pos], A[pos + 4]);
+                    swap(A[pos + 3], A[pos + 1]);
+                }
+            }
+            return A[pos + 2];
+        }
     }
-    if (sz / 5 * 5 != sz) {
-        medians.push_back(getMedian(A, i * 5, sz % 5));
-        ++i;
-    }
-
-    int medianAlongAll;
-    if (sz <= 5) medianAlongAll = medians[0];
-    else medianAlongAll = median(medians, 0, i - 1, i / 2);
-    
-    int medAlongAllPos = divide(A, l, r, medianAlongAll);
-    if (medAlongAllPos - l == index - 1)
-        return A[medAlongAllPos];
-    if (medAlongAllPos - l > index - 1)
-        return median(A, l, medAlongAllPos - 1, index);
-    return median(A, medAlongAllPos + 1, r , index - medAlongAllPos + l - 1);
 }
 
 int divide (vector<int> &A, int l, int r, int pivot) {
@@ -41,6 +81,27 @@ int divide (vector<int> &A, int l, int r, int pivot) {
             swap(A[i++], A[j--]);
     }
     return pivot_index;
+}
+
+int median (vector<int> &A, int l, int r, int index) {
+    if (index <= 0 || index > r - l + 1) return INT_MAX;
+    int sz = r - l + 1;
+    vector<int> medians;
+    for (int i = 0; i < sz / 5; ++i)
+        medians.push_back(getMedian(A, i * 5, 5));
+    if (sz / 5 * 5 != sz)
+        medians.push_back(getMedian(A, medians.size() * 5, sz % 5));
+
+    int medianAmongAll;
+    if (sz <= 5) medianAmongAll = medians[0];
+    else medianAmongAll = median(medians, 0, medians.size() - 1, medians.size() / 2);
+    
+    int medAmongAllPos = divide(A, l, r, medianAmongAll);
+    if (medAmongAllPos - l == index - 1)
+        return A[medAmongAllPos];
+    if (medAmongAllPos - l > index - 1)
+        return median(A, l, medAmongAllPos - 1, index);
+    return median(A, medAmongAllPos + 1, r, index - medAmongAllPos + l - 1);
 }
 
 void quicksort (vector<int> &A, int l, int r) {
@@ -61,37 +122,51 @@ int main (int argc, char **argv) {
     }
 
     /* Input process */
-    int n;
-    cin >> n;
+    // int n;
+    // cin >> n;
 
-    mt19937 gen(time(nullptr));
+    // mt19937 gen(time(nullptr));
 
-    vector<int> A(n);
-    for (auto & el : A) {
-        el = gen();
-    }
+    // vector<int> A(n);
+    // for (auto & el : A) {
+    //     el = gen();
+    // }
 
-    struct timespec start, end;
-    clock_gettime(CLOCK_MONOTONIC, &start);
-    ios_base::sync_with_stdio(false);
+    // struct timespec start, end;
+    // clock_gettime(CLOCK_MONOTONIC, &start);
+    // ios_base::sync_with_stdio(false);
 
-    /* Sort process */
-    quicksort(A, 0, n - 1);
+    // /* Sort process */
+    // quicksort(A, 0, n - 1);
 
-    /* Getting the time of sorting */
-    clock_gettime(CLOCK_MONOTONIC, &end);
-    double time_taken;
-    time_taken = (end.tv_sec - start.tv_sec) * 1e9;
-    time_taken = (time_taken + (end.tv_nsec - start.tv_nsec)) * 1e-9;
-    cout << time_taken << setprecision(9) << '\n';
+    // /* Getting the time of sorting */
+    // clock_gettime(CLOCK_MONOTONIC, &end);
+    // double time_taken;
+    // time_taken = (end.tv_sec - start.tv_sec) * 1e9;
+    // time_taken = (time_taken + (end.tv_nsec - start.tv_nsec)) * 1e-9;
+    // cout << time_taken << setprecision(9) << '\n';
 
-    /* Print sorted array */
-    if (argc == 2) {
-        cout << "Sorted array :\n";
-        for (int i = 0; i < n; ++i)
-            cout << A[i] << ' ';
+    // /* Print sorted array */
+    // if (argc == 2) {
+    //     cout << "Sorted array :\n";
+    //     for (int i = 0; i < n; ++i)
+    //         cout << A[i] << ' ';
+    //     cout << '\n';
+    // }
+
+    vector<int> p({1, 2, 3, 4, 5});
+    vector<int> perm(p);
+    do {
+        vector<int> x(p);
+        getMedian(x, 0, 5);
+        for (auto & el : p)
+            cout << el << ' ';
         cout << '\n';
-    }
+        for (auto & el : x)
+            cout << el << ' ';
+        cout << '\n';
+        cout << '\n';
+    } while (next_permutation(p.begin(), p.end()));
 
     return 0;
 }
