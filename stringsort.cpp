@@ -8,12 +8,18 @@ int main (int argc, char **argv) {
     }
 
     /* Input process */
+    mt19937 gen(time(nullptr));
     int n;
     cin >> n;
+    int m;
+    cin >> m;
 
     vector<string> A(n);
-    for (auto & el : A)
-        cin >> el;
+    for (auto & el : A) {
+        el.resize(m);
+        for (int i = 0; i < m; ++i)
+            el[i] = 'a' + gen() % 26;
+    }
 
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC, &start);
