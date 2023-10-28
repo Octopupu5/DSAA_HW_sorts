@@ -10,13 +10,12 @@ struct node {
 
 void insert (node *& skiplist, int key, int &sl_h) {
     int height = 1;
-    while ((rand() & 1) && height < sl_h - 1) ++height;
-    // if (height == sl_h) {
-    //     sl_h = height + 1;
-    //     node *right_bound = new node(INT_MAX, nullptr, skiplist->next->down);
-    //     skiplist = new node(INT_MIN, right_bound, skiplist);
-    //     cout << sl_h << '\n';
-    // }
+    while ((rand() & 1) && height < sl_h) ++height;
+    if (height == sl_h) {
+        sl_h = height + 1;
+        node *right_bound = new node(INT_MAX, nullptr, skiplist->next->down);
+        skiplist = new node(INT_MIN, right_bound, skiplist);
+    }
     
     int h = sl_h;
     node *l = skiplist;
@@ -53,7 +52,7 @@ int main (int argc, char **argv) {
 
     vector<int> A(n);
     for (auto & el : A) {
-        el = gen() % 5000 - 2500;
+        el = gen();
     }
 
     struct timespec start, end;
