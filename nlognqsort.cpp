@@ -136,7 +136,7 @@ int main (int argc, char **argv) {
 
     vector<int> A(n);
     for (auto & el : A) {
-        el = gen() % 5000;
+        el = gen();
     }
 
     struct timespec start, end;

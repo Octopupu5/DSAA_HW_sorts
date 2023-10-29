@@ -15,14 +15,14 @@ int main (int argc, char **argv) {
     cin >> m;
 
     vector<string> A(n);
-    // for (auto & el : A) {
-    //     el.resize(m);
-    //     for (int i = 0; i < m; ++i)
-    //         el[i] = 'a' + gen() % 26;
-    // }
+    for (auto & el : A) {
+        el.resize(m);
+        for (int i = 0; i < m; ++i)
+            el[i] = 'a' + gen() % 26;
+    }
 
-    /* Special cases */
-    ///*
+    /* Special case */
+    /*
     for (auto & el : A)
         el.resize(m);
     if (m == 1) {
@@ -42,7 +42,7 @@ int main (int argc, char **argv) {
             A[i][m - 3] = 'a' + i / 26 / 26;
         }
     }
-    //*/
+    */
 
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC, &start);
