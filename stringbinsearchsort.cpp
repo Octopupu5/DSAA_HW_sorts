@@ -15,11 +15,34 @@ int main (int argc, char **argv) {
     cin >> m;
 
     vector<string> A(n);
-    for (auto & el : A) {
+    // for (auto & el : A) {
+    //     el.resize(m);
+    //     for (int i = 0; i < m; ++i)
+    //         el[i] = 'a' + gen() % 26;
+    // }
+
+    /* Special cases */
+    ///*
+    for (auto & el : A)
         el.resize(m);
-        for (int i = 0; i < m; ++i)
-            el[i] = 'a' + gen() % 26;
+    if (m == 1) {
+        int count_for_each = n / 26;
+        for (int i = 0; i < 26; ++i) {
+            for (int j = 0; j < count_for_each; ++j)
+                A[i * count_for_each + j] = 'a' + i;
+        }
+        for (int i = 0; i < n - count_for_each * 26; ++i)
+            A[count_for_each * 26 + i] = 'z';
     }
+    if (m >= 3) {
+        int index = m - 1;
+        for (int i = 0; i < n; ++i) {
+            A[i][m - 1] = 'a' + i % 26;
+            A[i][m - 2] = 'a' + (i / 26) % 26;
+            A[i][m - 3] = 'a' + i / 26 / 26;
+        }
+    }
+    //*/
     
     struct timespec start, end;
     clock_gettime(CLOCK_MONOTONIC, &start);
