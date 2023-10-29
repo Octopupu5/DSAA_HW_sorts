@@ -40,6 +40,8 @@ int main (int argc, char **argv) {
             A[i][m - 1] = 'a' + i % 26;
             A[i][m - 2] = 'a' + (i / 26) % 26;
             A[i][m - 3] = 'a' + i / 26 / 26;
+            for (int j = 0; j < m - 3; ++j)
+                A[i][j] = 'a';
         }
     }
     */
