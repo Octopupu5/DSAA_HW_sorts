@@ -107,10 +107,10 @@ int findMedian (vector<int> &A, int l, int r, int index) {
         median_among_medians = findMedian(medians, 0, count_medians - 1, count_medians / 2);
     
     int pivot_among_medians = divide(A, l, r, median_among_medians);
-	if (pivot_among_medians == l + index - 1)
-		return A[pivot_among_medians];
-	if (pivot_among_medians > l + index - 1)
-		return findMedian(A, l, pivot_among_medians - 1, index);
+    if (pivot_among_medians == l + index - 1)
+	return A[pivot_among_medians];
+    if (pivot_among_medians > l + index - 1)
+	return findMedian(A, l, pivot_among_medians - 1, index);
 	
     return findMedian(A, pivot_among_medians + 1, r, index - pivot_among_medians + l - 1);
 }
